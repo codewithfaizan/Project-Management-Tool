@@ -1,0 +1,14 @@
+1. Error encountered when posting new Data for second time
+
+MongoServerError: E11000 duplicate key error collection: Project-Management.admins index: adminId_1 dup key: { adminId: null }
+    at /home/faizan/Project-Management-Tool/server/node_modules/mongodb/lib/operations/insert.js:50:33
+    at /home/faizan/Project-Management-Tool/server/node_modules/mongodb/lib/operations/command.js:84:64
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  index: 0,
+  code: 11000,
+  keyPattern: { adminId: 1 },
+  keyValue: { adminId: null },
+  [Symbol(errorLabels)]: Set(0) {}
+}
+
+Sol- Drop the collection or change the collection, basically delete the collection.

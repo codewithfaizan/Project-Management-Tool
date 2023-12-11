@@ -1,40 +1,24 @@
-// Import required modules
 import express from "express";
 import config from "config";
-
-// DB Connect in Config Folder
+import cors from "cors"
 
 import "./utils/dbConnect.js";
 
 // Create an instance of Express
 const app = express();
-const PORT = process.env.PORT || config.get("PORT");
+
+const PORT = process.env.PORT || config.get("PORT") || 3000;
 
 // Middleware - Parse incoming requests as JSON
 app.use(express.json());
 
+app.use(cors("*"));
 // Define routes
 app.get("/", (req, res) => {
-  res.send("Hello, World!");
+  res.status(200).send(`Server is Running`);
 });
 
-// Example route with a parameter
-app.get("/hello/:name", (req, res) => {
-  const { name } = req.params;
-  res.send(`Hello, ${name}!`);
-});
-
-// Example route for handling POST requests
-app.post("/greet", (req, res) => {
-  const { name } = req.body;
-  if (name) {
-    res.json({ message: `Hello, ${name}!` });
-  } else {
-    res
-      .status(400)
-      .json({ error: "Name parameter is missing in the request body." });
-  }
-});
+// app.use("/admin", adminRoute)
 
 // Handle 404 errors - Route not found
 app.use((req, res, next) => {
