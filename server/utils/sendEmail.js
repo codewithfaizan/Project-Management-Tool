@@ -12,8 +12,8 @@ async function sendMail(emailData) {
             port: PORT,
             secure: true,
             auth: {
-                user: AUTH["USER"],
-                pass: AUTH["PASS"]
+                user: AUTH.USER,
+                pass: AUTH.PASS,
             }
         });
 
@@ -23,7 +23,8 @@ async function sendMail(emailData) {
             to: emailData.to,
             html: emailData.body
         });
-        console.log("EMAIL SENT");
+        console.log(`Message-Id: ${info.messageId}`)
+        console.log(`Mail Sent Successfully`)
         // await fs.appendFile("logs/emaillogs.txt", `${info.messageId}\n`);
     } catch (error) {
         console.log(error);

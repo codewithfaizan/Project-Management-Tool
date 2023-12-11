@@ -1,6 +1,10 @@
 import express from "express";
+
 import config from "config";
-import cors from "cors"
+
+import publicRouter from "./controllers/public/index.js"
+
+import { logger } from "./middlewares/Logger/loggerMiddleware.js";
 
 import "./utils/dbConnect.js";
 
@@ -12,13 +16,13 @@ const PORT = process.env.PORT || config.get("PORT") || 3000;
 // Middleware - Parse incoming requests as JSON
 app.use(express.json());
 
-app.use(cors("*"));
+app.use(logger);
 // Define routes
 app.get("/", (req, res) => {
   res.status(200).send(`Server is Running`);
 });
 
-// app.use("/admin", adminRoute)
+app.use("/auth", publicRouter);
 
 // Handle 404 errors - Route not found
 app.use((req, res, next) => {

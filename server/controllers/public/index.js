@@ -60,7 +60,7 @@ router.post("/register",RegisterValidations(),errorMiddelware, async (req, res) 
     // });
     // console.log(`Email Link is - http://${config.get("URL")}/users/verify/email/${emailToken}`)
 
-    // const otp = await generateRandomOTP();
+    const otp = await generateRandomOTP();
 
     // //---------------sendSMS------------------------------
     // sendSMS({

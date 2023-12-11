@@ -1,4 +1,4 @@
-import twilio from twilio;
+import twilio from "twilio";
 import config from "config";
 
 const { TWILIO_SID, TWILIO_TOKEN, TWILIO_NUMBER } = config.get("SEND_SMS");
@@ -13,10 +13,10 @@ async function sendSMS(smsData) {
         await client.messages
             .create({
                 body: smsData.body,
-                to: smsData.phone,
+                to: smsData.to,
                 from: TWILIO_NUMBER
             });
-            console.log("SMS SEnt");
+            console.log("SMS SENT");
     } catch (err) {
         console.error(err);
     }

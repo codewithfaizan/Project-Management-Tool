@@ -32,13 +32,9 @@ const adminSchema = new mongoose.Schema({
 
   },
   phone: {
-    type: Number,
+    type: String,
     unique: true,
     required: true,
-    validate : {
-      validator : Number.isInteger,
-      message   : '{VALUE} is not an integer value'
-    },
     trim :true
   },
   role: {
@@ -75,5 +71,5 @@ const adminSchema = new mongoose.Schema({
 },
   { timestamps: true });
 
-  export default mongoose.model("Admin", adminSchema, "admins");
+  export default mongoose.model("Users", adminSchema, "Users");
 
