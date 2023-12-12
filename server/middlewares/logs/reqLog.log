@@ -94,3 +94,5 @@
 20231211	23:41:35	a953047b-6071-43d5-9ec0-552e2ad0af54	POST	/auth/register	undefined
 20231211	23:42:31	f3e35fa6-9f29-4ab3-850c-768900e09045	POST	/auth/register	undefined
 20231211	23:43:08	5ae9f37c-d2b4-422f-a4c0-54d38daf154c	POST	/auth/register	undefined
+20231212	00:07:12	d8bf8ead-75f9-4a6e-af9b-b9640215970b	POST	/auth/login	undefined
+20231212	00:07:32	59ae5765-6e85-4e7f-b012-eef9fd9e2f10	POST	/auth/login	undefined

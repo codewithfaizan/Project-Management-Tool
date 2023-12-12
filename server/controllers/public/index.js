@@ -2,20 +2,20 @@ import express from "express";
 import config from "config";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-// import CryptoJS from "crypto-js";
+import CryptoJS from "crypto-js";
 
 import userModel from "../../models/users/Users.js";
 import randomString from "../../utils/randomString.js";
 import generateRandomOTP from "../../utils/generateOTP.js";
 
-import {RegisterValidations, errorMiddelware, LoginValidations} from "../../middlewares/Validations/index.js"
+import { RegisterValidations, errorMiddelware, LoginValidations } from "../../middlewares/Validations/index.js"
 
 import sendMail from "../../utils/sendEmail.js";
 import sendSMS from "../../utils/sendSMS.js";
 
 const router = express.Router();
 
-router.post("/register",RegisterValidations(),errorMiddelware, async (req, res) => {
+router.post("/register", RegisterValidations(), errorMiddelware, async (req, res) => {
   try {
     let userData = new userModel(req.body);
 
@@ -106,7 +106,7 @@ router.get("/verify/email/:token", async (req, res) => {
   };
 
   let findEmail = await userModel.findOne({
-    "userverifytoken.email" : verifyToken.emailCode
+    "userverifytoken.email": verifyToken.emailCode
   });
   console.log(`findEmail -`, findEmail);
 
@@ -135,7 +135,7 @@ router.get("/verify/phone/:token", async (req, res) => {
   };
 
   let findPhone = await userModel.findOne({
-    "userverifytoken.phone" : verifyToken.phoneCode
+    "userverifytoken.phone": verifyToken.phoneCode
   });
   console.log(`findPhone -`, findPhone);
 
@@ -149,10 +149,35 @@ router.get("/verify/phone/:token", async (req, res) => {
 })
 
 
-router.post("/login", (req, res)=> {
-  const userData = req.body;
-  if(userData.email){
+router.post("/login", async (req, res) => {
+  try {
+    const userData = req.body;
 
+    const checkEmail = await userModel.findOne({ email: userData.email });
+
+    if (checkEmail) {
+      let isFound = await bcrypt.compare(userData.password, checkEmail.password);
+      if (isFound) {
+        const payload = {
+          user_id: checkEmail._id,
+          role: checkEmail.role
+        }
+
+        const token = jwt.sign(payload, config.get("SECRET-KEY.JWT"), {
+          expiresIn: "3m"
+        });
+
+        const encryptedToken = CryptoJS.AES.encrypt(token, config.get("SECRET-KEY.CRYPTO")).toString();
+        return res.status(200).cookie(encryptedToken).json({ success: true, message: "Logged in Successfully", encryptedToken });
+      }
+      return res.status(401).json({ error: "Invalid Password" })
+    }
+    else {
+      return res.status(409).json({ message: "Email Not Found" })
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, error: error.message })
   }
 })
 
