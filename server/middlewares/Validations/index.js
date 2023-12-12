@@ -4,7 +4,7 @@ const RegisterValidations = () => {
     return [
         body("fullName", "Full Name is required").notEmpty().isLength({ min: 2, max: 25 }).withMessage("Length shuld be >2, <25 letters"),
         body("displayName").notEmpty().isLength({ min: 2, max: 25 }).withMessage("Display name is required"),
-        
+
         body("email", "Should be a Valid Email").isEmail(),
         body("phone").isMobilePhone().withMessage("Should be a Valid Phone Number"),
 
@@ -35,4 +35,4 @@ function errorMiddelware(req, res, next) {
     return next();
 }
 
-export {RegisterValidations, LoginValidations , errorMiddelware}
+export { RegisterValidations, LoginValidations, errorMiddelware }

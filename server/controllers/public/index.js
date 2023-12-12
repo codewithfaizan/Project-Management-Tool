@@ -149,7 +149,7 @@ router.get("/verify/phone/:token", async (req, res) => {
 })
 
 
-router.post("/login", async (req, res) => {
+router.post("/login",LoginValidations(), errorMiddelware, async (req, res) => {
   try {
     const userData = req.body;
 
@@ -162,15 +162,14 @@ router.post("/login", async (req, res) => {
           user_id: checkEmail._id,
           role: checkEmail.role
         }
-
         const token = jwt.sign(payload, config.get("SECRET-KEY.JWT"), {
           expiresIn: "3m"
         });
-
+        // console.log(token)
         const encryptedToken = CryptoJS.AES.encrypt(token, config.get("SECRET-KEY.CRYPTO")).toString();
         return res.status(200).cookie(encryptedToken).json({ success: true, message: "Logged in Successfully", encryptedToken });
       }
-      return res.status(401).json({ error: "Invalid Password" })
+      return res.status(401).json({ error: "Wrong Password" })
     }
     else {
       return res.status(409).json({ message: "Email Not Found" })

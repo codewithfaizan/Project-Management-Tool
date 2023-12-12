@@ -5,8 +5,11 @@ import config from "config";
 import publicRouter from "./controllers/public/index.js"
 
 import { logger } from "./middlewares/Logger/loggerMiddleware.js";
+import authMiddleware from "./middlewares/auth/authMiddleware.js";
 
 import "./utils/dbConnect.js";
+
+
 
 // Create an instance of Express
 const app = express();
@@ -23,6 +26,8 @@ app.get("/", (req, res) => {
 });
 
 app.use("/auth", publicRouter);
+
+app.use(authMiddleware)
 
 // Handle 404 errors - Route not found
 app.use((req, res, next) => {
