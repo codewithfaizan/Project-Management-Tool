@@ -6,7 +6,7 @@ import publicRouter from "./controllers/public/index.js"
 
 import { logger } from "./middlewares/Logger/loggerMiddleware.js";
 import authMiddleware from "./middlewares/auth/authMiddleware.js";
-
+import adminController from "./controllers/admin/adminController.js"
 import "./utils/dbConnect.js";
 
 
@@ -27,7 +27,9 @@ app.get("/", (req, res) => {
 
 app.use("/auth", publicRouter);
 
-app.use(authMiddleware)
+app.use(authMiddleware);
+
+app.use("/admin", adminController)
 
 // Handle 404 errors - Route not found
 app.use((req, res, next) => {
