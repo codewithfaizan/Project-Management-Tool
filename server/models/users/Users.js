@@ -21,7 +21,7 @@ const adminSchema = new mongoose.Schema({
   title : {
     type: String,
     required : true,
-    enum: ['Developer', 'UX Designer', 'DevOps Engineer', 'System Admin', 'Developer Intern', 'Business Executive', 'HR', 'Team Lead', 'Manager'],
+    // enum: ['Developer', 'UX Designer', 'DevOps Engineer', 'System Admin', 'Developer Intern', 'Business Executive', 'HR', 'Team Lead', 'Manager'],
     trim : true
   },
   email: {

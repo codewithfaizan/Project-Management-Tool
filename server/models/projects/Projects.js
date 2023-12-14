@@ -33,7 +33,11 @@ const projectSchema = new mongoose.Schema({
     endDate: {
         type: String,
         required: true
-    }
+    },
+    assignedBy: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: '_id'
+    }]
 },
     { timestamps: true });
 

@@ -162,7 +162,7 @@ router.post("/login", LoginValidations(), errorMiddelware, async (req, res) => {
     const userData = req.body;
 
     const checkEmail = await userModel.findOne({ email: userData.email });
-
+    // console.log(`checkEmail : ${checkEmail}`)
     if (checkEmail) {
       let isFound = await bcrypt.compare(
         userData.password,
@@ -174,7 +174,7 @@ router.post("/login", LoginValidations(), errorMiddelware, async (req, res) => {
           role: checkEmail.role,
         };
         const token = jwt.sign(payload, config.get("SECRET-KEY.JWT"), {
-          expiresIn: "3m",
+          expiresIn: "60m",
         });
         // console.log(token)
         const encryptedToken = CryptoJS.AES.encrypt(
@@ -205,7 +205,7 @@ router.post("/forgetpassword", async (req, res) => {
     const userData = req.body;
 
     const checkEmail = await userModel.findOne({ email: userData.email });
-    console.log(`checkEmail- ${checkEmail}`);
+    // console.log(`checkEmail- ${checkEmail}`);
     if (checkEmail) {
       var OTP = await generateRandomOTP();
 
@@ -218,9 +218,13 @@ router.post("/forgetpassword", async (req, res) => {
       });
       // // console.log(`Email Link is - http://${config.get("URL")}/users/verify/email/${emailToken}`)
       // // Link to reset password is <a href = 'http://${config.get("URL")}/auth/verify/email/${emailToken}'> link </a>
+      let data = {
+        code : OTP,
+        email : userData.email
+      }
       res.cookie(
-        "otp",
-        OTP,
+        "data",
+        data,
         { expires: new Date(Date.now() + 180000), httpOnly: true },
         { domain: "/auth/forgetpassword/resetpassword" }
       );
@@ -238,14 +242,17 @@ router.post("/forgetpassword", async (req, res) => {
 router.post("/forgetpassword/resetpassword/:email", async (req, res) => {
   try {
     const cookie = req.cookies;
-    console.log(cookie.otp);
+    // console.log(`cookie is ${cookie.data.email}`);
+    // console.log(`cookie is ${cookie.data.code}`);
+
     const email = req.params.email;
+    if(email !== cookie.data.email) return res.status(404).json({error : "Invalid Email"});
 
     const { code, newPassword, confirmPassword } = req.body;
-    console.log(code, newPassword, confirmPassword);
+    // console.log(code, newPassword, confirmPassword);
     // console.log()
-    if (code === cookie.otp) {
-      if (newPassword !== confirmPassword)
+    if (code === cookie.data.code) {
+        if (newPassword !== confirmPassword)
         // const isMatch = await bcrypt.compare(userData.password, userData.confirmPassword);
         return res.status(404).json({ error: "Password did not Match" });
 
@@ -255,9 +262,11 @@ router.post("/forgetpassword/resetpassword/:email", async (req, res) => {
         { $set: { password: hashpassword } },
         { new: true }
       );
-      res.cookie(
-        "otp", { domain: "/auth/forgetpassword/resetpassword" }
+      res.clearCookie(
+        "data", { domain: "/auth/forgetpassword" }
       );
+      const cookie = req.cookies;
+      // console.log(`cookie is ${cookie.otp}`)
       return res.status(200).json({ message: "Password Changed Successfully" });
       // //  _id, {password:hashedpassword}, {new:true}
       // }
