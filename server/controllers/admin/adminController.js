@@ -3,13 +3,20 @@ import bcrypt from "bcrypt"
 
 import randomString from "../../utils/randomString.js";
 import userModel from "../../models/users/Users.js";
+import verifyRole from "../../middlewares/verifyRole/verifyRole.js";
 
 const router = express.Router();
+
+router.use(verifyRole);
 
 router.post("/addadmin", async (req, res) => {
     try {
         let newAdmin = new userModel(req.body);
-    
+
+        // const authHeader = req.headers["auth-token"] || req.headers["authorization"];
+        // console.log(`authHeader is ${authHeader}`);
+        console.log(`payload is ${req.payload.user_id}`);
+
         let emailCheck = await userModel.findOne({ email: newAdmin.email });
         if (emailCheck) {
             return res.status(409).json({ error: "Email already Exist" });
@@ -25,8 +32,10 @@ router.post("/addadmin", async (req, res) => {
         newAdmin.userverifytoken.phone = randomString(10);
         newAdmin.userverifytoken.email = randomString(10);
 
+        newAdmin.role = "admin"
+        newAdmin.createdBy = req.payload.user_id
         await newAdmin.save();
-        console.log(newAdmin)
+        console.log(newAdmin);
         res.status(200).json({ message: "Admin Added Successfully", res: newAdmin });
         // return res.status(200).json({ "message": "Admin Added Successfully", response: newAdmin });
     } catch (error) {
@@ -55,7 +64,7 @@ router.get("/getadminbyid/:id", async (req, res) => {
         if (!getAdmin) {
             return res.status(404).json({ error: "Id not found" })
         };
-        console.log(getAdmin)
+        // console.log(getAdmin)
         res.status(200).json(getAdmin);
 
     } catch (error) {
@@ -87,6 +96,7 @@ router.delete("/deleteadminbyid/:id", async (req, res) => {
         const { id } = req.params;
 
         const deleteData = await userModel.findByIdAndDelete(id);
+
         if (!deleteData) {
             return res.status(404).json({ error: "Id Not Found" })
         }
@@ -103,9 +113,7 @@ router.delete("/deletealladmins", async (req, res) => {
 
         res.status(200).json({ msg: "All Admins Deleted" })
     } catch (error) {
-
         console.log(error.message);
-
         res.status(500).json({ error: "Internal Server Error" })
     }
 });

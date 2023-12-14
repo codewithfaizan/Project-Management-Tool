@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
+import mongoose, { isValidObjectId } from "mongoose";
 
-const adminSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
 
    fullName: {
     type: String,
@@ -50,6 +50,10 @@ const adminSchema = new mongoose.Schema({
   profilePicture :{
     type : String
   },
+  createdBy : {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: '_id'
+  },
   userverified: {
     email: {
       type: Boolean,
@@ -67,9 +71,10 @@ const adminSchema = new mongoose.Schema({
     phone: {
       type: String,
     },
+  
   }
 },
   { timestamps: true });
 
-  export default mongoose.model("Users", adminSchema, "Users");
+  export default mongoose.model("Users", userSchema, "Users");
 

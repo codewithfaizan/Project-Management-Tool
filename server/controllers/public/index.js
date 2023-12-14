@@ -242,8 +242,8 @@ router.post("/forgetpassword", async (req, res) => {
 router.post("/forgetpassword/resetpassword/:email", async (req, res) => {
   try {
     const cookie = req.cookies;
-    // console.log(`cookie is ${cookie.data.email}`);
-    // console.log(`cookie is ${cookie.data.code}`);
+    console.log(`cookie is ${cookie.data.email}`);
+    console.log(`cookie is ${cookie.data.code}`);
 
     const email = req.params.email;
     if(email !== cookie.data.email) return res.status(404).json({error : "Invalid Email"});
