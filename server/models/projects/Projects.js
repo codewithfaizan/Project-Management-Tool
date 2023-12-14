@@ -16,30 +16,28 @@ const projectSchema = new mongoose.Schema({
     },
     status: {
         type: String,
+        enum: ['Pending', 'Completed', 'Not Started', 'Cancelled', 'In Progress'],
         required: true
     },
     createdBy: {
-        type: String,
-        required: true
+        type: mongoose.Schema.Types.ObjectId,
+        ref: '_id'
     },
     assignedTo: {
         type: String,
         required: true
     },
-    startDate : {
-        type : String,
-        required : true
+    startDate: {
+        type: String,
+        
     },
     endDate: {
         type: String,
-        required: true
+     
     },
-    assignedBy: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: '_id'
-    }]
+
 },
     { timestamps: true });
 
-export default mongoose.model("Admin", projectSchema, "admins");
+export default mongoose.model("Projects", projectSchema, "projects");
 

@@ -5,11 +5,16 @@ import randomString from "../../utils/randomString.js";
 import userModel from "../../models/users/Users.js";
 import verifyRole from "../../middlewares/verifyRole/verifyRole.js";
 
+import {
+    RegisterValidations,
+    errorMiddelware,
+    LoginValidations,
+  } from "../../middlewares/Validations/index.js";
 const router = express.Router();
 
 router.use(verifyRole);
 
-router.post("/addadmin", async (req, res) => {
+router.post("/addadmin",RegisterValidations(),errorMiddelware, async (req, res) => {
     try {
         let newAdmin = new userModel(req.body);
 

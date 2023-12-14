@@ -8,6 +8,7 @@ import { logger } from "./middlewares/Logger/loggerMiddleware.js";
 import authMiddleware from "./middlewares/auth/authMiddleware.js";
 import adminController from "./controllers/admin/adminController.js"
 import employeeController from "./controllers/employees/employeeController.js"
+import projectRouter from "./controllers/projects/index.js"
 import "./utils/dbConnect.js";
 
 
@@ -32,6 +33,7 @@ app.use(authMiddleware);
 
 app.use("/admin", adminController)
 app.use("/employee", employeeController);
+app.use("/projects", projectRouter)
 // Handle 404 errors - Route not found
 app.use((req, res, next) => {
   res.status(404).send("404 - Not Found");

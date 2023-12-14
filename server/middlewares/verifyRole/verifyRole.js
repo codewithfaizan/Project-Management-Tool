@@ -1,8 +1,8 @@
 const verifyRole = (req, res, next) => {
     try {
         const payload = req.payload
-        console.log(`payload in verifyM is ${payload.user_id}`);
-        console.log(`payload in verifyM is ${payload.role}`);
+        // console.log(`payload in verifyM is ${payload.user_id}`); 
+        // console.log(`payload in verifyM is ${payload.role}`);
         const role = payload.role
         if (role == 'admin') { 
             return next(); 
