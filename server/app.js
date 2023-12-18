@@ -1,5 +1,5 @@
 import express from "express";
-
+import cors from "cors"
 import config from "config";
 
 import publicRouter from "./controllers/public/index.js"
@@ -15,6 +15,11 @@ import "./utils/dbConnect.js";
 
 // Create an instance of Express
 const app = express();
+app.use(cors({
+  origin : [`http://${config.get("URL")}`],
+ methods: ['GET', 'POST','PUT',"DELETE"],
+ credentials : true
+}))
 
 const PORT = process.env.PORT || config.get("PORT") || 3000;
 

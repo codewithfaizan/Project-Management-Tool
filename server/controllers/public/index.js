@@ -50,7 +50,7 @@ router.post(
           emailCode: userData.userverifytoken.email,
         },
         config.get("SECRET-KEY.JWT"),
-        { expiresIn: "2m" }
+        { expiresIn: "5m" }
       );
 
       const phoneToken = jwt.sign(
@@ -58,7 +58,7 @@ router.post(
           phoneCode: userData.userverifytoken.phone,
         },
         config.get("SECRET-KEY.JWT"),
-        { expiresIn: "2m" }
+        { expiresIn: "5m" }
       );
 
       // // ---------------sendMail--------------------------
