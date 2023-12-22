@@ -1,7 +1,51 @@
-import * as React from "react";
+import React, { useState } from "react";
 import "../index.css";
 
-export default function Form() {
+export default function RegisterForm() {
+  const [formData, setFormData] = useState({
+    fullName: "",
+    displayName: "",
+    title: "",
+    email: "",
+    phone: "",
+    role: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  console.log(`FormData - ${formData.title}`)
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch("http://192.168.0.106:5000/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      })
+
+      if (response.ok) {
+        console.log("Registration successful");
+        // Optionally, redirect to login page or handle success
+      } else {
+        console.error("Registration failed");
+        // Handle registration failure (e.g., display an error message)
+      }
+    } catch (error) {
+      console.error("Error during registration:", error);
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div class="container basis-full mx-auto box-border flex flex-row max-w-fit items-center justify-self-center bg-orange-400 rounded-3xl shadow-xl">
@@ -19,7 +63,7 @@ export default function Form() {
         </div>
 
         <div className="w-8/12 basis-1/2 w-96 bg-white p-6 px-2.5 py-2.5 top-0.5 rounded-r-3xl mx-auto overflow-hidden">
-          <form class="max-w-md mx-auto min-h-full top-0.5 left-2 p-4">
+          <form onSubmit={handleSubmit} class="max-w-md mx-auto min-h-full top-0.5 left-2 p-4">
             <div class="left-0 p-2 text-center text-black text-2xl font-bold font-['Lexend Deca']">
               <h1>Create Account</h1>
             </div>
@@ -31,8 +75,9 @@ export default function Form() {
                 <input
                   type="text"
                   name="fullName"
-                  id="fullName"
-                  class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-gray-900 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  value={formData.fullName}
+                  onChange={handleChange}
+                  class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-gray-900 focus:outline-none focus:ring-0 focus:border-red-500 peer"
                   placeholder=" "
                   required
                 />
@@ -49,7 +94,8 @@ export default function Form() {
                 <input
                   type="text"
                   name="displayName"
-                  id="displayName"
+                  value={formData.displayName}
+                  onChange={handleChange}
                   class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-gray-900 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                   placeholder=" "
                   required
@@ -67,7 +113,8 @@ export default function Form() {
                 <input
                   type="text"
                   name="title"
-                  id="title"
+                  value={formData.title}
+                  onChange={handleChange}
                   class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-gray-900 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                   placeholder=" "
                   required
@@ -85,7 +132,8 @@ export default function Form() {
                 <input
                   type="email"
                   name="email"
-                  id="email"
+                  value={formData.email}
+                  onChange={handleChange}
                   class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-gray-900 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                   placeholder=" "
                   required
@@ -104,13 +152,14 @@ export default function Form() {
                   <input
                     type="tel"
                     name="phone"
-                    id="floating_phone"
+                    value={formData.phone}
+                    onChange={handleChange}
                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-gray-900 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                     placeholder=" "
                     required
                   />
                   <label
-                    for="floating_phone"
+                    for="phone"
                     class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:gray-900 peer-focus:dark:text-gray-900 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                   >
                     Phone Number +91
@@ -124,7 +173,8 @@ export default function Form() {
                     // class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                   ></label>
                   <select
-                    id="role"
+                    value={formData.role}
+                    onChange={handleChange}
                     class=" block py-2.5 px-auto bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-100 dark:text-black"
                   >
                     <option>Employee</option>
@@ -136,7 +186,8 @@ export default function Form() {
                 <input
                   type="password"
                   name="password"
-                  id="password"
+                  value={formData.password}
+                  onChange={handleChange}
                   class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-nlack dark:border-gray-600 dark:focus:border-gray-900 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                   placeholder=" "
                   required
@@ -153,7 +204,8 @@ export default function Form() {
                 <input
                   type="password"
                   name="confirmPassword"
-                  id="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
                   class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-gray-900 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                   placeholder=" "
                   required
