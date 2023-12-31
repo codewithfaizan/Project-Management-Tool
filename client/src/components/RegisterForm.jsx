@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import "../index.css";
+// import "../index.css";
+
+import { useNavigate } from "react-router-dom";
 
 export default function RegisterForm() {
   const [formData, setFormData] = useState({
@@ -12,7 +14,11 @@ export default function RegisterForm() {
     password: "",
     confirmPassword: "",
   });
+
   const [responseMessage, setResponseMessage] = useState("");
+
+  const navigate = useNavigate();
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -21,8 +27,8 @@ export default function RegisterForm() {
     }));
   };
 
-  console.log(`role - ${formData.role}`);
-  console.log(`phone - ${formData.phone}`);
+  // console.log(`role - ${formData.role}`);
+  // console.log(`phone - ${formData.phone}`);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -39,11 +45,14 @@ export default function RegisterForm() {
         const data = await response.json();
         setResponseMessage(data.message);
         console.log("Data submitted successfully");
+
+        navigate('/login')
       } else {
         const errorData = await response.json();
         setResponseMessage(errorData.message);
         console.error("Failed to submit data");
       }
+
     } catch (error) {
       setResponseMessage("An error occurred while submitting the form.");
       console.error("Error submitting data:", error);
@@ -281,7 +290,7 @@ export default function RegisterForm() {
                 </div>
               </div>
             </div>  
-            {responseMessage && (<div className="p-2.5 bg-green-200 text-lg text-center text-bold items-center text-green-800 rounded-md"> {responseMessage}</div>)}
+            {responseMessage && (<div className=  "p-0.5 bg-green-200 text-lg text-center text-bold font-['Lexend Deca'] leading-tight items-center text-green-800 rounded-md"> {responseMessage}</div>)}
           </form>
            
         </div>

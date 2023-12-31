@@ -4,14 +4,15 @@ import {createBrowserRouter, RouterProvider} from 'react-router-dom';
 import RegisterForm from "./components/RegisterForm"
 import Login from "./components/Login"
 import Reset from "./components/Reset"
-import Recover from "./components/Recover"
+import Recover from './components/RecoverPassword/Recover';
 import PageNotFound from "./components/PageNotFound"
+import Dashboard from './pages/dashboard';
 // root routes
 
 const router = createBrowserRouter([
   {
     path : '/',
-    element : <RegisterForm></RegisterForm>
+    element : <Login></Login>
   },
   {
     path : '/register',
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
   {
     path : '/login',
     element  : <Login></Login>
+  },
+  {
+    path : '/dashboard',
+    element  : <Dashboard></Dashboard>
   },
   {
     path : '/recover',
@@ -40,7 +45,10 @@ const router = createBrowserRouter([
 export default function App() {
   return (
     <main>
-      <RouterProvider router={router}></RouterProvider>
+      <RouterProvider router={router}>
+    
+
+      </RouterProvider>
     </main>   
   )
 }
