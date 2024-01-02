@@ -487,3 +487,13 @@
 20231214	21:51:32	b47794e6-a430-4071-9b89-f84ea8dd647f	GET	/projects/getall	undefined
 20231214	21:51:37	add9d2e9-b0a6-4c5a-bd09-239a2e899ab6	GET	/projects/getbyid/657b7717113d33ca6c731032	undefined
 20231214	21:51:43	bfe95d31-e03b-4c9d-9cbe-64b476eccf84	GET	/projects/getbyid/657b78da41b5403cd5d22f52	undefined
+20231222	19:48:30	1d462cc6-52ee-4a3d-a7ce-c30906b9c9d2	GET	/	undefined
+20231222	19:48:31	fb27a25f-9d92-498f-9c9d-5bffc992af31	GET	/favicon.ico	undefined
+20231222	19:49:02	0b5c5a94-e661-4fa5-926b-6a023e8254b5	GET	/	undefined
+20231222	19:49:02	716638e3-d01c-4f5c-bc53-cb85bfa81294	GET	/favicon.ico	undefined
+20231222	19:49:03	9e6bda68-f832-4a08-90da-d95fb3404c21	GET	/	undefined
+20231222	19:49:03	022548e4-27f2-45a0-bd35-dfec30c7893d	GET	/favicon.ico	undefined
+20231222	19:49:03	db5c34c9-5587-4ba8-a3ab-f7e13673239d	GET	/	undefined
+20231222	19:49:03	f4ca8b98-e907-40d8-a9b5-9dccab3dbd16	GET	/favicon.ico	undefined
+20231222	19:49:03	73143261-4243-494d-97c6-962416bf3a91	GET	/	undefined
+20231222	19:49:03	b94c623e-a219-4080-a498-4a536f6a2dc5	GET	/favicon.ico	undefined

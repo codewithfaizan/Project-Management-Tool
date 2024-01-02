@@ -205,6 +205,7 @@ router.post("/forgetpassword", async (req, res) => {
     const userData = req.body;
 
     const checkEmail = await userModel.findOne({ email: userData.email });
+    
     // console.log(`checkEmail- ${checkEmail}`);
     if (checkEmail) {
       var OTP = await generateRandomOTP();

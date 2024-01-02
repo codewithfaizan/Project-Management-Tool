@@ -15,9 +15,10 @@ import "./utils/dbConnect.js";
 
 // Create an instance of Express
 const app = express();
+
 app.use(cors({
-  origin : [`http://${config.get("URL")}`],
- methods: ['GET', 'POST','PUT',"DELETE"],
+  origin : ['http://localhost:5173/'],
+ methods: ['GET','PATCH','POST','PUT','DELETE'],
  credentials : true
 }))
 
