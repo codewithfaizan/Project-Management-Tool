@@ -6,7 +6,7 @@ const verifyRole = (req, res, next) => {
         const role = payload.role
         if (role == 'admin') { 
             return next(); 
-        } else return res.status(404).json({error: "Cannot Access this route"})
+        } else return res.status(404).json({error: "Only Admin Can Access this Route"})
     } catch (error) {
         console.error(error);
         return res.status(401).json({ success: false, message: "Unauthorized Access" })

@@ -103,11 +103,11 @@ API Endpoint : /user/email/:token
 
 router.get("/verify/email/:token", async (req, res) => {
   let emailToken = req.params.token;
-  console.log(`Email Token is ${emailToken}`);
+  // console.log(`Email Token is ${emailToken}`);
 
   let verifyToken = jwt.verify(emailToken, config.get("SECRET-KEY.JWT"));
 
-  console.log(`verifyToken = ${verifyToken.emailCode}`);
+  // console.log(`verifyToken = ${verifyToken.emailCode}`);
 
   res.json(verifyToken.emailCode);
 
@@ -118,7 +118,7 @@ router.get("/verify/email/:token", async (req, res) => {
   let findEmail = await userModel.findOne({
     "userverifytoken.email": verifyToken.emailCode,
   });
-  console.log(`findEmail -`, findEmail);
+  // console.log(`findEmail -`, findEmail);
 
   if (findEmail.userverified.email == true) {
     return res.status(200).json({ success: "Email already Verified" });
@@ -205,11 +205,10 @@ router.post("/forgetpassword", async (req, res) => {
     const userData = req.body;
 
     const checkEmail = await userModel.findOne({ email: userData.email });
-    
+
     // console.log(`checkEmail- ${checkEmail}`);
     if (checkEmail) {
       var OTP = await generateRandomOTP();
-
       sendMail({
         subject: "Reset Password",
         to: userData.email,
@@ -220,16 +219,18 @@ router.post("/forgetpassword", async (req, res) => {
       // // console.log(`Email Link is - http://${config.get("URL")}/users/verify/email/${emailToken}`)
       // // Link to reset password is <a href = 'http://${config.get("URL")}/auth/verify/email/${emailToken}'> link </a>
       let data = {
-        code : OTP,
-        email : userData.email
+        code: OTP,
+        email: userData.email
       }
       res.cookie(
         "data",
         data,
-        { expires: new Date(Date.now() + 180000), httpOnly: true },
+        { expires: new Date(Date.now() + 5 * 60 * 1000), httpOnly: true },
         { domain: "/auth/forgetpassword/resetpassword" }
       );
-      res.json({ message: "OTP sent to Mail" });
+
+      res.json({ message: "OTP sent to Mail and is Valid for 5 Minutes" });
+
       // return res.redirect(`/auth/forgetpassword/resetpassword/${checkEmail._id}`);
     } else {
       return res.status(409).json({ message: "Email Not Found" });
@@ -240,39 +241,51 @@ router.post("/forgetpassword", async (req, res) => {
   }
 });
 
-router.post("/forgetpassword/resetpassword/:email", async (req, res) => {
+router.post("/verify", (req, res) => {
   try {
+    const { code } = req.body;
+    console.log(`code ${code}`)
+
     const cookie = req.cookies;
-    // console.log(`cookie is ${cookie.data.email}`);
-    // console.log(`cookie is ${cookie.data.code}`);
+    console.log(`cookies ${cookie}`)
 
-    const email = req.params.email;
-    if(email !== cookie.data.email) return res.status(404).json({error : "Invalid Email"});
-
-    const { code, newPassword, confirmPassword } = req.body;
-    // console.log(code, newPassword, confirmPassword);
-    // console.log()
     if (code === cookie.data.code) {
-        if (newPassword !== confirmPassword)
-        // const isMatch = await bcrypt.compare(userData.password, userData.confirmPassword);
-        return res.status(404).json({ error: "Password did not Match" });
-
-        let hashpassword = await bcrypt.hash(newPassword, 10);
-        await userModel.findOneAndUpdate(
-        { email: email },
-        { $set: { password: hashpassword } },
-        { new: true }
-      );
-      res.clearCookie(
-        "data", { domain: "/auth/forgetpassword" }
-      );
-      const cookie = req.cookies;
-      // console.log(`cookie is ${cookie.otp}`)
-      return res.status(200).json({ message: "Password Changed Successfully" });
-      // //  _id, {password:hashedpassword}, {new:true}
-      // }
+      res.json({ message: "OTP Verification Successful" })
     }
     return res.json({ error: "Invalid OTP" });
+  } catch (error) {
+
+  }
+})
+
+router.post("/resetpassword", async (req, res) => {
+  try {
+
+    const email = req.cookies.email;
+    const cookie = req.cookies;
+    // console.log(`cookie Email is ${cookie.data.email}`);
+    
+    const { newPassword, confirmPassword } = req.body;
+
+    if (newPassword !== confirmPassword)
+
+      return res.status(404).json({ error: "Password did not Match" });
+
+    let hashpassword = await bcrypt.hash(newPassword, 10);
+    await userModel.findOneAndUpdate(
+      { email: email },
+      { $set: { password: hashpassword } },
+      { new: true }
+    );
+    // res.clearCookie(
+    //   "data", { domain: "/auth/forgetpassword" }
+    // );
+    // const cookie = req.cookies;
+    // console.log(`cookie is ${cookie.otp}`)
+    return res.status(200).json({ message: "Password Changed Successfully" });
+    // //  _id, {password:hashedpassword}, {new:true}
+    // }
+
   } catch (error) {
     console.error(error);
     res
